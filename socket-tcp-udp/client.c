@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
             read(socket_fd, &token, sizeof(Token));
             close(socket_fd);
         } else {
-//                recv(socket_fd, &token, sizeof(token), 0);
             udp_recv(socket_fd, &token);
             close(socket_fd);
         }
@@ -88,14 +87,12 @@ int main(int argc, char *argv[]) {
             read(TMP_FD, &token, sizeof(Token));
             close(TMP_FD);
         } else {
-//            recv(TMP_FD, &token, sizeof(token), 0);
             udp_recv(TMP_FD, &token);
             close(TMP_FD);
         }
 
 
         if (token.type == CONNECTION_TOKEN) {
-//            PROGRAM_CONFIG.neighbour_port = token.listening_port;
             set_client_id(token.senderID);
         }
     }
@@ -122,7 +119,6 @@ int main(int argc, char *argv[]) {
             if (PROGRAM_CONFIG.protocol == TCP) {
                 read(TMP_FD, &tmp_token, sizeof(Token));
             } else {
-//                recv(TMP_FD, &tmp_token, sizeof(tmp_token), 0);
                 udp_recv(TMP_FD, &tmp_token);
             }
 
@@ -179,22 +175,7 @@ int main(int argc, char *argv[]) {
                     close(TMP_FD);
 
                     continue;
-//                } else if (is_token_from_me(tmp_token) && EXPECT_CONFIRMATION) {
-//                    printf("Received confirmation\n");
-//                    EXPECT_CONFIRMATION = FALSE;
-//
-//                    Token token = {
-//                            .type = TOKEN,
-//                            .status = FREE
-//                    };
-//
-//                    SOCKET_OUT = establish_socket_client(PROGRAM_CONFIG.neighbour_port);
-//
-//                    HAS_TOKEN = FALSE;
-//                    send_token(token);
-//                    close(TMP_FD);
-//
-//                    continue;
+
                 } else if (has_message_to_send() && tmp_token.status == FREE) {
 
                     printf("has msg %d\n", has_message_to_send());
@@ -224,8 +205,6 @@ int main(int argc, char *argv[]) {
     }
 #pragma clang diagnostic pop
 
-
-    return 0;
 }
 
 int establish_socket_server(int port, char *ip) {
@@ -246,7 +225,6 @@ int establish_socket_server(int port, char *ip) {
         struct sockaddr_in address;
         address.sin_family = AF_INET;
         address.sin_port = htons((uint16_t) port);
-//    address.sin_addr.s_addr = htonl(INADDR_ANY);
         address.sin_addr.s_addr = inet_addr(ip);
 
         if ((bind(socket_fd, (struct sockaddr *) &address, sizeof(address))) != 0) {
@@ -266,7 +244,6 @@ int establish_socket_server(int port, char *ip) {
         int sock_fd;
         struct sockaddr_in servaddr, cliaddr;
 
-        // Creating socket file descriptor
         if ((sock_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
             perror("socket creation failed");
             exit(EXIT_FAILURE);
@@ -276,7 +253,7 @@ int establish_socket_server(int port, char *ip) {
         memset(&cliaddr, 0, sizeof(cliaddr));
 
         // Filling server information
-        servaddr.sin_family = AF_INET; // IPv4
+        servaddr.sin_family = AF_INET;
         servaddr.sin_addr.s_addr = inet_addr(ip);
         servaddr.sin_port = htons(port);
 
@@ -335,7 +312,6 @@ int establish_socket_client(int port) {
     } else {
         int sock_fd;
 
-//        sleep(1);
         if ((sock_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
             perror("socket creation failed");
             exit(EXIT_FAILURE);
