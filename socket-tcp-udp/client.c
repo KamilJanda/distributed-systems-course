@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
             if (tmp_token.type == CONNECTION_TOKEN) {
                 set_client_id(tmp_token.senderID);
 
-                printf("PREVIOUS CLIENT %s\n", PREVIOUS_CLIENT_ID);
+//                printf("PREVIOUS CLIENT %s\n", PREVIOUS_CLIENT_ID);
 
                 char msg[16];
                 sprintf(msg, "%d", tmp_token.listening_port);
@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
 
                 } else if (has_message_to_send() && tmp_token.status == FREE) {
 
-                    printf("has msg %d\n", has_message_to_send());
+//                    printf("has msg %d\n", has_message_to_send());
 
                     strcpy(tmp_token.senderID, PROGRAM_CONFIG.userId);
                     strcpy(tmp_token.receiverID, RECEIVER);
@@ -332,7 +332,7 @@ void send_token(Token token) {
         }
 
         write(SOCKET_OUT, &token, sizeof(token));
-        printf("Normal token sent| sender: %s, Receiver: %s, msg: %s \n", token.senderID, token.receiverID, token.msg);
+//        printf("Normal token sent| sender: %s, Receiver: %s, msg: %s \n", token.senderID, token.receiverID, token.msg);
         close(SOCKET_OUT);
     } else {
         struct sockaddr_in servaddr;
