@@ -12,6 +12,7 @@
 #define FREE 4
 #define TOKEN 5
 #define CONNECTION_TOKEN 6
+#define JOIN_TOKEN 7
 
 typedef struct Configuration{
     char userId[128];
@@ -25,10 +26,12 @@ typedef struct Configuration{
 typedef struct Token {
     int type;
     int status;
-    char receiver_name[128]; // client ID
+    char senderID[128];
+    char receiverID[128];
     char msg[1024];
-//    access_record ac_rec;
+    int flag;
     int listening_port;
+    unsigned int TTL;
 } Token;
 
 struct Configuration read_args(int argc, char *argv[]);
