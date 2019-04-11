@@ -59,11 +59,23 @@ public class Doctor extends HospitalWorker {
         var consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) {
-                String message = new String(body);
-                System.out.println("Received result: " + message);
+
+                switch (properties.getType()) {
+                    case ExaminationResponse: {
+                        String message = new String(body);
+                        System.out.println("Received result: " + message);
+                        break;
+                    }
+                    case AdminMessage: {
+                        String message = new String(body);
+                        System.out.println("[ADMIN INFO] Message from admin: " + message);
+                        break;
+                    }
+                }
             }
         };
         channel.basicConsume(this.callbackQueue, true, consumer);
+        channel.basicConsume(this.logQueue, true, consumer);
     }
 
 

@@ -19,11 +19,11 @@ public class Admin extends HospitalWorker {
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) throws IOException, TimeoutException {
         var admin = new Admin();
-        var br = new BufferedReader(new InputStreamReader(System.in));
 
         admin.listenLogs();
         while (true) {
             System.out.println("Insert message:");
+            var br = new BufferedReader(new InputStreamReader(System.in));
             String message = br.readLine();
             admin.sendBroadcast(message);
         }

@@ -33,14 +33,28 @@ class Technician extends HospitalWorker {
         var consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException {
-                Message message = SerializationUtils.deserialize(body);
-                System.out.println("Received assignment: " + message.examination + " from: " + properties.getReplyTo());
-                var response = message.patientName + " " + message.examination + " done";
-                examinationResponse(response, properties.getReplyTo());
+
+                switch (properties.getType()) {
+                    case OrderExamination: {
+                        Message message = SerializationUtils.deserialize(body);
+                        System.out.println("Received assignment: " + message.examination + " from: " + properties.getReplyTo());
+                        var response = message.patientName + " " + message.examination + " done";
+                        examinationResponse(response, properties.getReplyTo());
+                        break;
+                    }
+                    case AdminMessage: {
+                        String message = new String(body);
+                        System.out.println("[ADMIN INFO] Message from admin: " + message);
+                        break;
+                    }
+                }
+
             }
         };
         System.out.println("Waiting for messages...");
         channel.basicConsume(this.queueName, true, consumer);
+        channel.basicConsume(this.logQueue, true, consumer);
+
     }
 
     private void examinationResponse(String message, String receiver) throws IOException {
