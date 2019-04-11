@@ -4,10 +4,12 @@ import com.rabbitmq.client.Envelope;
 import constants.Routes;
 import org.apache.commons.lang3.SerializationUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeoutException;
 
-public class Doctor extends Participant {
+public class Doctor extends HospitalWorker {
 
     private String doctorID;
     private String callbackQueue;
@@ -17,13 +19,25 @@ public class Doctor extends Participant {
 
         callbackQueue = channel.queueDeclare().getQueue();
         channel.queueBind(callbackQueue, HOSPITAL_EXCHANGE, Routes.getDoctorRoutingKey(doctorID));
-
     }
 
     public static void main(String[] args) throws IOException, TimeoutException {
         var doctor = new Doctor(args[0]);
 
-        doctor.orderExamination("elbow", "Joe");
+        doctor.listenAdmin();
+        assignExamination(doctor);
+    }
+
+    @SuppressWarnings("InfiniteLoopStatement")
+    private static void assignExamination(Doctor doctor) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            System.out.println("Insert examination type:");
+            String examinationType = br.readLine();
+            System.out.println("Insert patient name");
+            String patientName = br.readLine();
+            doctor.orderExamination(examinationType, patientName);
+        }
     }
 
     private void orderExamination(String examination, String patientName) throws IOException {
@@ -34,6 +48,7 @@ public class Doctor extends Participant {
         var props = new BasicProperties
                 .Builder()
                 .replyTo(Routes.getDoctorRoutingKey(doctorID))
+                .type(OrderExamination)
                 .build();
 
         channel.basicPublish(HOSPITAL_EXCHANGE, routingKey, props, message);

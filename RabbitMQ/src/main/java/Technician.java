@@ -9,14 +9,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-class Technician extends Participant {
+class Technician extends HospitalWorker {
     private String queueName;
+    private String logQueue;
 
     Technician(List<String> skills) throws IOException, TimeoutException {
         queueName = channel.queueDeclare().getQueue();
         for (String skill : skills) {
             channel.queueBind(queueName, HOSPITAL_EXCHANGE, Routes.getRoutingKey(skill));
         }
+
+        logQueue = channel.queueDeclare().getQueue();
+        channel.queueBind(logQueue, LOG_EXCHANGE, "");
     }
 
     public static void main(String[] args) throws IOException, TimeoutException {
@@ -40,7 +44,12 @@ class Technician extends Participant {
     }
 
     private void examinationResponse(String message, String receiver) throws IOException {
-        channel.basicPublish(HOSPITAL_EXCHANGE, receiver, null, message.getBytes());
+        var props = new BasicProperties
+                .Builder()
+                .type(ExaminationResponse)
+                .build();
+
+        channel.basicPublish(HOSPITAL_EXCHANGE, receiver, props, message.getBytes());
 
     }
 }
