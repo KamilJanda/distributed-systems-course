@@ -1,4 +1,4 @@
-package services
+package bank.services
 
 import bank.{Account, AccountCredential, BankDatabase}
 import com.twitter.util.Future

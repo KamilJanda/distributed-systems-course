@@ -1,6 +1,6 @@
-package services
+package bank.services
 
-import Utilities.PasswordManager
+import bank.Utilities.PasswordManager
 import bank._
 import com.twitter.util.Future
 

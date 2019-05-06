@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package currency;
+
+enum Currency {
+    PLN = 0;
+    USD = 1;
+    EUR = 2;
+    GBP = 3;
+}
+
+message ExchangeRateRequest {
+    Currency baseCurrency = 1;
+    repeated Currency currencyType = 2;
+}
+
+message CurrencyRate {
+    Currency currency = 1;
+    double rate = 2;
+}
+
+message ExchangeRateResponse {
+    repeated CurrencyRate exchangeRateInfo = 1;
+}
+
+service ExchangeRateService {
+    rpc getExchangeRateStream (ExchangeRateRequest) returns (stream ExchangeRateResponse) {
+    }
+    rpc getInitialExchangeRates (ExchangeRateRequest) returns (ExchangeRateResponse) {
+    }
+}

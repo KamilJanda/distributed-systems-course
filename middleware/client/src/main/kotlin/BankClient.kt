@@ -15,7 +15,7 @@ fun main() {
     val accountClient: Account.Client = Account.Client(
             TMultiplexedProtocol(accountProtocol, "AccountService"))
     val premiumAccountClient: PremiumAccount.Client = PremiumAccount.Client(
-            TMultiplexedProtocol(accountProtocol, "AccountService"))
+            TMultiplexedProtocol(accountProtocol, "PremiumAccountService"))
 
     creatorTransport.open()
     accountTransport.open()
@@ -62,6 +62,39 @@ fun main() {
                 }
             }
             "loan" -> {
+                println("Enter pesel")
+                val pesel = readLine(input) ?: break@loop
+
+                println("Enter password")
+                val password = readLine(input) ?: break@loop
+
+                println("Enter currency")
+                val currency = readLine(input) ?: break@loop
+
+                println("Enter amount")
+                val amount = readLine(input) ?: break@loop
+
+                println("Enter duration")
+                val duration = readLine(input) ?: break@loop
+
+                try {
+                    val loanResult = premiumAccountClient.applyForLoan(
+                            AccountCredential(pesel, password),
+                            LoanRequestInfo(
+                                    Currency.valueOf(currency.toUpperCase()),
+                                    amount.toLong(),
+                                    duration.toLong()
+                            )
+                    )
+
+                    println(loanResult)
+
+                } catch (e: AuthorizationFailed) {
+                    println("Authorization failed")
+                } catch (e: CurrencyNotSupported) {
+                    println("Currency not supported")
+                }
+
 
             }
             else -> break@loop
