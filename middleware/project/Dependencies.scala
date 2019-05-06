@@ -9,5 +9,11 @@ object Dependencies {
     "com.twitter" %% "finagle-thrift" % "19.4.0" exclude("com.twitter", "libthrift"),
   )
 
-  val all = scrooge
+  val gRpc = Seq(
+    "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf",
+    "io.grpc" % "grpc-netty" % scalapb.compiler.Version.grpcJavaVersion,
+    "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
+  )
+
+  val all = scrooge ++ gRpc
 }
