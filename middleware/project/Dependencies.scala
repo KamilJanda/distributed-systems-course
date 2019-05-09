@@ -15,5 +15,10 @@ object Dependencies {
     "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
   )
 
-  val all = scrooge ++ gRpc
+  val akka = Seq(
+    "com.typesafe.akka" %% "akka-actor" % "2.5.21",
+    "com.typesafe.akka" %% "akka-stream-typed" % "2.5.21"
+  )
+
+  val all = scrooge ++ gRpc ++ akka
 }

@@ -11,8 +11,8 @@ import currencyService.CurrencyExchangeClient
 object BankServer extends App {
   implicit val bankDatabase: BankDatabase = new BankDatabase
 
-  val bankPort: Int = 8000
-  val creatorPort: Int = 8080
+  val bankPort: Int = args(0).toInt
+  val creatorPort: Int = args(1).toInt
   val exchangePort: Int = 30300
 
   val bankIncomePolicy = new BankIncomePolicy(900)
