@@ -1,0 +1,4 @@
+game_of_thrones,1000
+year_1984,4000
+lalka,4500
+war_and_peace,4800

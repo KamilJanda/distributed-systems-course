@@ -33,7 +33,6 @@ class CurrencyExchangeServer {
       server.awaitTermination()
     }
   }
-
 }
 
 object CurrencyExchangeServer extends App {

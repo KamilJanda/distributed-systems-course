@@ -9,8 +9,6 @@ import scala.concurrent.Future
 
 class ExchangeRateService extends ExchangeRateServiceGrpc.ExchangeRateService {
 
-  val system = ActorSystem("ExchangeRateServiceActorSystem")
-
   override def getExchangeRateStream(
                                       request: ExchangeRateRequest,
                                       responseObserver: StreamObserver[ExchangeRateResponse]
